@@ -41,22 +41,28 @@ class LGSyllableSpec extends FlatSpec {
     assert(syllsUcode == Vector("βιοῖ","ο"))
   }
   it should "preserve leading and trailing content when recursively splitting on vowel+diphthong" in {
-
-    val v1 = Vector(LiteraryGreekString("a)/eide"))
-    val sylls = LGSyllable.splitOnVowelDiphth(v1)
-    println(sylls.mkString("\n"))
-    /*
     val strVector = "ὥς κε νέηαι".split(" ").toVector
     val gsVector = strVector.map(LiteraryGreekString(_))
-
-    val gsVector = Vector(LiteraryGreekString("a)/eide"))
     val sylls = LGSyllable.splitOnVowelDiphth(gsVector)
     val syllsUcode = sylls.map(_.ucode)
-    assert(syllsUcode == Vector("ὥσ","κε","νέη","αι"))*/
+    assert(syllsUcode == Vector("ὥς","κε","νέη","αι"))
 
   }
-  it should "preserve leading and trailing content when recursively splitting on short vowel+vowel" in pending
-  it should "preserve leading and trailing content when recursively splitting on long vowel+vowel" in pending
+  it should "preserve leading and trailing content when recursively splitting on short vowel+vowel" in {
+    val gsVector = Vector(LiteraryGreekString("a)ntio/wsan"))
+    val sylls = LGSyllable.splitOnShortVowelVowel(gsVector)
+    val syllsUcode = sylls.map(_.ucode)
+    assert(syllsUcode == Vector("ἀντι","ό","ωσαν"))
+  }
+
+  it should "preserve leading and trailing content when recursively splitting on long vowel+vowel" in {
+
+    val gsVector = Vector(LiteraryGreekString("ἡρώων"))
+    val sylls = LGSyllable.splitOnLongVowelVowel(gsVector)
+    val syllsAscii = sylls.map(_.ascii)
+    assert(syllsAscii == Vector("h(rw/","wn"))
+  }
+
   it should "preserve leading and trailing content when recursively splitting on upsilon+vowel" in pending
   it should "preserve leading and trailing content when recursively splitting on double consonant" in pending
   it should "preserve leading and trailing content when recursively splitting on consonant cluster" in pending

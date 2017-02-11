@@ -64,74 +64,88 @@ object LGSyllable {
     })
   }
 
+
+
+  // short break out long vs short to insist on proper
+  // accet ...
+  def splitOnVowelDiphth(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
+    val vowelDiphPattern = "(.*[aeiouhw][\\(\\)/=]*)(ai|oi|ei|au|eu|ou|hu|wu|ui)(.*)".r
+
+    v.flatMap (gs => {
+      gs.ascii match {
+          case vowelDiphPattern(lead, diph, trail) => {
+            if (trail.isEmpty) {
+              val matchVector = Vector(lead,diph).map(LiteraryGreekString(_))
+              splitOnVowelDiphth(matchVector)
+            } else {
+              val matchVector = Vector(lead,diph + trail).map(LiteraryGreekString(_))
+              splitOnVowelDiphth(matchVector)
+            }
+        }
+        case _ => Vector(gs)
+      }
+    })
+  }
+
+  def splitOnShortVowelVowel(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
+    val shortPlusVowelPattern = "(.*[aeio][\\)\\(\\+/]*)([aehiow].*)".r
+    v.flatMap (gs => {
+      gs.ascii match {
+          case shortPlusVowelPattern(lead, trail) => {
+            splitOnShortVowelVowel(
+              Vector(LiteraryGreekString(lead), LiteraryGreekString(trail)))
+          }
+          case _ => Vector(gs)
+        }
+      })
+  }
+  def splitOnLongVowelVowel(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
+    // ([hw][\)\(\|]?)([aehiow])
+    val longPlusVowelPattern = "(.*[hw][\\)\\(\\|\\+=/]*)([aehiow].*)".r
+    v.flatMap (gs => {
+      gs.ascii match {
+        case longPlusVowelPattern(lead, trail) => {
+          splitOnLongVowelVowel(
+            Vector(LiteraryGreekString(lead), LiteraryGreekString(trail)))
+        }
+        case _ => Vector(gs)
+        }
+      })
+  }
+  def splitOnUpsilonVowel(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
+    // (u[\)\(])([aehouw])
+    v
+  }
+  def splitOnDoubleCons(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
+    // (b{2}|g{2}|d{2}|z{2}|q{2}|k{2}|l{2}|m{2}|n{2}|p{2}|r{2}|s{2}|t{2}|f{2}|x{2})([^'])
+    v
+  }
+  def splitOnConsCluster(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
+    // ([\)\(aeiouhw\|\+][_\^]?)([bgdzqkpcstfxy][mnbgdzqklcprstfxy]+)([^'])
+    v
+  }
+  def splitOnVCV(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
+    //([\)\(aeiouhw\|\+][_\^]?)([bgdzqklmncprstfxy][aeiouhw])
+
+    v
+  }
+
+  def syllabify(s: String): Vector[LiteraryGreekString] = {
+    val vect = s.split(" ").filter(_.nonEmpty).toVector
+    val gsVect = vect.map(LiteraryGreekString(_))
+    syllabify(gsVect)
+  }
   def syllabify(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    val dia = splitOnDiaeresis (v)
+    val dia = splitOnDiaeresis(v)
     val mn = splitOnMuNu(dia)
-    mn
-
-/*
-
-diphthong_vowel
-vowel_diphthong
-shortv_vowel
-longv_vowel
-upsilon_vowel
-double_consonant
-consonant_cluster
-vowel_consonantvowel
-
-    // dipthong-vowel splits
-    syllabic = syllabic.replaceAll(diphthong_vowel) { fullMatch, dipth, vow ->
-      dipth + "#" + vow
-    }
-    // vowel-dipthong splits
-    syllabic = syllabic.replaceAll(vowel_diphthong) {fullMatch, vow, dipth ->
-      vow + "#" + dipth
-    }
-    // split short vowel followed by non-diphthong
-    syllabic = syllabic.replaceAll(shortv_vowel) {fullMatch, v1, v2 ->
-      v1 + "#" + v2
-    }
-    // apply twice because regex matches overlap if there are 3 successive vowels.
-    syllabic = syllabic.replaceAll(shortv_vowel) {fullMatch, v1, v2 ->
-      v1 + "#" + v2
-    }
-
-    // split long vowel by nature followed by non-diphthong
-    syllabic = syllabic.replaceAll(longv_vowel) {fullMatch, v1, v2 ->
-    v1 + "#" + v2
-    }
-    // split long vowel marked with macron followed by non-diphthong
-    syllabic = syllabic.replaceAll(vowelwmacron_vowel) {fullMatch, v1, v2 ->
-    v1 + "#" + v2
-    }
-    // split upsilon followed by non-diphthong
-    syllabic = syllabic.replaceAll(upsilon_vowel) {fullMatch, u, v ->
-      u + "#" + v
-    }
-    // double consonants split
-    syllabic = syllabic.replaceAll(double_consonant) { fullMatch, doubled, trail ->
-      doubled[0] + "#" + doubled[1] + trail
-    }
-
-    // Otherwise, consonant clusters start a syllable.
-    // Must apply  pattern twice, because regex
-    // matches can overlap.
-    syllabic = syllabic.replaceAll(consonant_cluster) { fullMatch, v, cons, trail ->
-      v + "#" + cons + trail
-    }
-    syllabic = syllabic.replaceAll(consonant_cluster) { fullMatch, v, cons, trail ->
-      v + "#" + cons + trail
-    }
-
-    // Must apply vowel-consonant-vowel pattern twice, because regex
-    // matches can overlap.
-    syllabic = syllabic.replaceAll(vowel_consonantvowel) { fullMatch, v, cv ->
-      v + "#" + cv
-    }
-    syllabic = syllabic.replaceAll(vowel_consonantvowel) { fullMatch, v, cv ->
-      v + "#" + cv
-    }
-    */
+    val lc = splitOnLiqCons(mn)
+    val dv = splitOnDiphthVowel(lc)
+    val vd = splitOnVowelDiphth(dv)
+    val shrtVwl = splitOnShortVowelVowel(vd)
+    val lngVwl = splitOnLongVowelVowel(shrtVwl)
+    val uVwl = splitOnUpsilonVowel(lngVwl)
+    val dblCons = splitOnDoubleCons(uVwl)
+    val conss = splitOnConsCluster(dblCons)
+    splitOnVCV(conss)
   }
 }
