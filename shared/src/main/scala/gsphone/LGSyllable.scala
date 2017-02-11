@@ -113,8 +113,16 @@ object LGSyllable {
       })
   }
   def splitOnUpsilonVowel(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    // (u[\)\(])([aehouw])
-    v
+    val upsVwlpattern = "(.*u[\\)\\(=/])([aehouw].*)".r
+    v.flatMap (gs => {
+      gs.ascii match {
+        case upsVwlpattern(lead, trail) => {
+          splitOnUpsilonVowel(
+            Vector(LiteraryGreekString(lead), LiteraryGreekString(trail)))
+        }
+        case _ => Vector(gs)
+        }
+      })
   }
   def splitOnDoubleCons(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
     // (b{2}|g{2}|d{2}|z{2}|q{2}|k{2}|l{2}|m{2}|n{2}|p{2}|r{2}|s{2}|t{2}|f{2}|x{2})([^'])
