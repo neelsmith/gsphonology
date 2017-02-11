@@ -40,7 +40,21 @@ class LGSyllableSpec extends FlatSpec {
     val syllsUcode = sylls.map(_.ucode)
     assert(syllsUcode == Vector("βιοῖ","ο"))
   }
-  it should "preserve leading and trailing content when recursively splitting on vowel+diphthong" in pending
+  it should "preserve leading and trailing content when recursively splitting on vowel+diphthong" in {
+
+    val v1 = Vector(LiteraryGreekString("a)/eide"))
+    val sylls = LGSyllable.splitOnVowelDiphth(v1)
+    println(sylls.mkString("\n"))
+    /*
+    val strVector = "ὥς κε νέηαι".split(" ").toVector
+    val gsVector = strVector.map(LiteraryGreekString(_))
+
+    val gsVector = Vector(LiteraryGreekString("a)/eide"))
+    val sylls = LGSyllable.splitOnVowelDiphth(gsVector)
+    val syllsUcode = sylls.map(_.ucode)
+    assert(syllsUcode == Vector("ὥσ","κε","νέη","αι"))*/
+
+  }
   it should "preserve leading and trailing content when recursively splitting on short vowel+vowel" in pending
   it should "preserve leading and trailing content when recursively splitting on long vowel+vowel" in pending
   it should "preserve leading and trailing content when recursively splitting on upsilon+vowel" in pending
