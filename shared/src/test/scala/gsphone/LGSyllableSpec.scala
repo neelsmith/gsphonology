@@ -6,13 +6,23 @@ import edu.holycross.shot.greek._
 
 class LGSyllableSpec extends FlatSpec {
 
-  "A syllable object for a literary Greek string" should "split syllables on diaeresis" in {
+  "A syllable object for a literary Greek string"  should "pass through a single syllable" in {
+    val sylls = LGSyllable.syllabify(Vector(LiteraryGreekString("w)=")))
+    val syllsAscii = sylls.map(_.ascii)
+    assert (syllsAscii == Vector("w)="))
+  }
+  it should "split syllables on diaeresis" in {
     val sylls = LGSyllable.syllabify(Vector(LiteraryGreekString("eu)+")))
     val syllsAscii = sylls.map(_.ascii)
     assert (syllsAscii == Vector("e","u)+"))
   }
+  it should "start a new syllable with mn" in pending /*{
 
-
+    val sylls = LGSyllable.syllabify(Vector(LiteraryGreekString("limnh")))
+    val syllsAscii = sylls.map(_.ascii)
+    assert (syllsAscii == Vector("li","mnh"))
+  }
+*/
 /*
 def testMap = [
 "poios"  : "poi#os",
