@@ -69,7 +69,12 @@ class LGSyllableSpec extends FlatSpec {
     val syllsAscii = sylls.map(_.ascii)
     assert(syllsAscii == Vector("lu/","e","mw/nuxas", "i(/ppous"))
   }
-  it should "preserve leading and trailing content when recursively splitting on double consonant" in pending
+  it should "preserve leading and trailing content when recursively splitting on double consonant" in {
+      val gsVector =  "ἐς μάχην τασσομένους".split(" ").toVector.map(LiteraryGreekString(_))
+      val sylls = LGSyllable.splitOnDoubleCons(gsVector)
+      val syllsAscii = sylls.map(_.ascii)
+      assert(syllsAscii == Vector("e)s","ma/xhn", "tas", "some/nous"))
+  }
   it should "preserve leading and trailing content when recursively splitting on consonant cluster" in pending
   it should "preserve leading and trailing content when recursively splitting on  vowel+=consonantvowel" in pending
 

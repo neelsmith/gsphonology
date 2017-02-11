@@ -125,8 +125,18 @@ object LGSyllable {
       })
   }
   def splitOnDoubleCons(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    // (b{2}|g{2}|d{2}|z{2}|q{2}|k{2}|l{2}|m{2}|n{2}|p{2}|r{2}|s{2}|t{2}|f{2}|x{2})([^'])
-    v
+    val doubleConsPattern = "(.*)(b{2}|g{2}|d{2}|z{2}|q{2}|k{2}|l{2}|m{2}|n{2}|p{2}|r{2}|s{2}|t{2}|f{2}|x{2})(.*)".r
+    v.flatMap (gs => {
+      gs.ascii match {
+        case doubleConsPattern(lead, dubble, trail) => {
+          splitOnDoubleCons(
+            Vector(LiteraryGreekString(lead + dubble(0)),
+
+             LiteraryGreekString(dubble(1) + trail)))
+        }
+        case _ => Vector(gs)
+        }
+      })
   }
   def splitOnConsCluster(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
     // ([\)\(aeiouhw\|\+][_\^]?)([bgdzqkpcstfxy][mnbgdzqklcprstfxy]+)([^'])
