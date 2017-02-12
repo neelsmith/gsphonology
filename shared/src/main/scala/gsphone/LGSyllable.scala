@@ -139,13 +139,32 @@ object LGSyllable {
       })
   }
   def splitOnConsCluster(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    // ([\)\(aeiouhw\|\+][_\^]?)([bgdzqkpcstfxy][mnbgdzqklcprstfxy]+)([^'])
-    v
+    val consClustPattern = "(.*[\\)\\(aeiouhw\\|\\+])([bgdzqkpcstfxy][mnbgdzqklcprstfxy]+.*)".r
+    v.flatMap (gs => {
+      gs.ascii match {
+        case consClustPattern(lead,  trail) => {
+          splitOnConsCluster(
+            Vector(LiteraryGreekString(lead),
+             LiteraryGreekString(trail)))
+        }
+        case _ => Vector(gs)
+        }
+      })
+
   }
   def splitOnVCV(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    //([\)\(aeiouhw\|\+][_\^]?)([bgdzqklmncprstfxy][aeiouhw])
+    val vcvPattern = "(.*[\\)\\(aeiouhw\\|\\+][\\)\\(/=]*)([bgdzqklmncprstfxy][aeiouhw].*)".r
 
-    v
+    v.flatMap (gs => {
+      gs.ascii match {
+        case vcvPattern(lead,  trail) => {
+          splitOnVCV(
+            Vector(LiteraryGreekString(lead),
+             LiteraryGreekString(trail)))
+        }
+        case _ => Vector(gs)
+        }
+      })
   }
 
   def syllabify(s: String): Vector[LiteraryGreekString] = {
