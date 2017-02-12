@@ -76,7 +76,7 @@ class LGSyllableSpec extends FlatSpec {
       assert(syllsAscii == Vector("e)s","ma/xhn", "tas", "some/nous"))
   }
   it should "preserve leading and trailing content when recursively splitting on consonant cluster" in {
-    val gsVector = "διαστήτην ἐρίσαντε".split(" ").toVector.map(LiteraryGreekString(_))
+    val gsVector = "diasth/thn e)ri/sante".split(" ").toVector.map(LiteraryGreekString(_))
     val sylls = LGSyllable.splitOnConsCluster(gsVector)
     val syllsAscii = sylls.map(_.ascii)
     assert(syllsAscii == Vector("dia","sth/thn", "e)ri/sante"))

@@ -1,6 +1,9 @@
 package edu.holycross.shot.gsphone
 import edu.holycross.shot.greek._
 
+case class LGSyllable (syllable: LiteraryGreekString) {
+
+}
 object LGSyllable {
 
   def splitOnDiaeresis(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
@@ -88,7 +91,7 @@ object LGSyllable {
   }
 
   def splitOnShortVowelVowel(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    val shortPlusVowelPattern = "(.*[aeio][\\)\\(\\+/]*)([aehiow].*)".r
+    val shortPlusVowelPattern = "(.*[aeio][\\)\\(\\+/]*)([aehow].*)".r
     v.flatMap (gs => {
       gs.ascii match {
           case shortPlusVowelPattern(lead, trail) => {
@@ -101,7 +104,7 @@ object LGSyllable {
   }
   def splitOnLongVowelVowel(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
     // ([hw][\)\(\|]?)([aehiow])
-    val longPlusVowelPattern = "(.*[hw][\\)\\(\\|\\+=/]*)([aehiow].*)".r
+    val longPlusVowelPattern = "(.*[hw][\\)\\(\\|\\+=/]*)([aehow].*)".r
     v.flatMap (gs => {
       gs.ascii match {
         case longPlusVowelPattern(lead, trail) => {
