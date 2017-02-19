@@ -6,7 +6,7 @@
 
 ## Current version: 1.0.1
 
-Status: experimental.  [Release notes](releases.md)
+Status: **experimental**.  [Release notes](releases.md)
 
 
 ## License
