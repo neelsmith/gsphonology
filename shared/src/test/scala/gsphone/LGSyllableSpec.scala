@@ -34,6 +34,9 @@ class LGSyllableSpec extends FlatSpec {
     val syllsUcode = sylls.map(_.ucode)
     assert(syllsUcode == Vector("σμιν","θεῦ"))
   }
+
+
+
   it should "preserve leading and trailing content when recursively splitting on diphthong+vowel" in {
     val gsVector = Vector(LiteraryGreekString("βιοῖο"))
     val sylls = LGSyllable.splitOnDiphthVowel(gsVector)

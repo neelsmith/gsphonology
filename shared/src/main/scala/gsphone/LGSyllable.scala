@@ -8,6 +8,7 @@ import js.annotation.JSExport
 }
 object LGSyllable {
 
+
   def splitOnDiaeresis(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
     val diaPattern = "(.*[aeiouhw][\\)\\(]?)([iu][\\)\\(]?\\+)(.*)".r
     v.flatMap (gs => {
@@ -21,6 +22,8 @@ object LGSyllable {
       }
     })
   }
+
+
 
   def splitOnMuNu(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
     val mnPattern = "(.*[aeiouhw\\|\\+])mn(.*)".r
@@ -39,10 +42,15 @@ object LGSyllable {
   }
 
 
+  /** Split on combination of liquid+consonant into a Vector of strings.
+  *
+  * @param v Vector of strings to split further.
+  */
   def splitOnLiqCons(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    val liqConsPattern = "(.+[\\)\\(aeiouhw\\|\\+])([lmnr])([bgdzqkcprstfxy]+.*)".r
-
+    //val liqConsPattern = "(.+[\\)\\(aeiouhw\\|\\+])([lmnr])([bgdzqkcprstfxy]+.*)".r
+    val liqConsPattern = "(.+)([lmnr])([bgdzqkcprstfxy]+.*)".r
     v.flatMap { gs => {
+      //println("SPLIT STRING: " + gs.ascii)
       gs.ascii match {
         case liqConsPattern(leadCluster,liquid,trail) => {
           val matchingContent = Vector(leadCluster + liquid, trail).filter(_.nonEmpty)
