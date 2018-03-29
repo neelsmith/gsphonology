@@ -4,7 +4,7 @@
 
 `gsphone` is a cross-platform library for phonological maniuplation of `GreekString` objects .
 
-## Current version: 1.0.1
+## Current version: 1.1.0
 
 Status: **experimental**.  [Release notes](releases.md)
 
