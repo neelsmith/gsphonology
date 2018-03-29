@@ -1,0 +1,12 @@
+
+# Setup
+title:            Greek phonology library
+
+baseurl: ""
+
+
+
+links:
+  - title: Github source repository
+    url: https://github.com/neelsmith/gsphonology
+    external: true
