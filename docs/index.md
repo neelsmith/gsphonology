@@ -7,4 +7,4 @@ layout: page
 Currently available:
 
 
--  Current [API docs](api/edu/holycross/shot/gsphonology/index.html)
+-  Current [API docs](api/edu/holycross/shot/gsphone/index.html)
