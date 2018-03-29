@@ -1,9 +1,9 @@
 package edu.holycross.shot.gsphone
 import edu.holycross.shot.greek._
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
-@JSExport  case class LGSyllable (syllable: LiteraryGreekString) {
+@JSExportAll   case class LGSyllable (syllable: LiteraryGreekString) {
 
 }
 object LGSyllable {
