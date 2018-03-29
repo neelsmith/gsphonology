@@ -1,8 +1,12 @@
 
+# Permalinks
+permalink:        pretty
+
 # Setup
 title:            Greek phonology library
 
-baseurl: ""
+
+baseurl: '/gsphonology/'
 
 
 
