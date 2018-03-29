@@ -6,4 +6,4 @@ layout: page
 
 Currently available:
 
--  [API docs](api/edu/holycross/shot/gsphone/index.html)
+-  [API docs](/api/edu/holycross/shot/gsphone/index.html)
