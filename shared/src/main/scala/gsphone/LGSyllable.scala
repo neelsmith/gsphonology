@@ -3,11 +3,50 @@ import edu.holycross.shot.greek._
 import scala.scalajs.js
 import scala.scalajs.js.annotation._
 
+import edu.holycross.shot.ohco2._
+import edu.holycross.shot.cite._
+import edu.holycross.shot.mid.validator._
+
+
 @JSExportAll   case class LGSyllable (syllable: LiteraryGreekString) {
 
 }
-object LGSyllable {
 
+
+@JSExportAll object LGSyllable extends MidOrthography {
+
+
+  // required by MidOrthography trait
+  def orthography = "Tokeniziation of literary Greek orthography by syllable"
+
+  // required by MidOrthography trait
+  def tokenCategories = Vector(TextSyllable)
+
+  // required by MidOrthography trait
+  def validCP(cp: Int): Boolean = LiteraryGreekString.validAsciiCP(cp)
+
+  def tokenizeNodeWithLGS(n: CitableNode, ucodeString: Boolean = true) = {
+    val syllables =  syllabify(n.text)
+    val urn = n.urn
+
+    val pairs = for (unit <- syllables.zipWithIndex) yield {
+      val newPassage = urn.passageComponent + "." + unit._2
+      val newVersion = urn.addVersion(urn.versionOption.getOrElse("") + "_sylls")
+      val newUrn = CtsUrn(newVersion.dropPassage.toString + newPassage)
+
+      //println(unit + " in " + newUrn)
+      val trimmed = if (ucodeString) unit._1.ucode.trim else unit._1.ascii.trim
+
+      MidToken(newUrn, trimmed, Some(TextSyllable))
+
+    }
+    pairs.toVector
+  }
+
+
+  def tokenizeNode (n: CitableNode) : Vector[MidToken]  = {
+    tokenizeNodeWithLGS(n, true)
+  }
 
   def splitOnDiaeresis(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
     val diaPattern = "(.*[aeiouhw][\\)\\(]?)([iu][\\)\\(]?\\+)(.*)".r
