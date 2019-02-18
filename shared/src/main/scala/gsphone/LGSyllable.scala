@@ -25,7 +25,20 @@ import edu.holycross.shot.mid.validator._
   // required by MidOrthography trait
   def validCP(cp: Int): Boolean = LiteraryGreekString.validAsciiCP(cp)
 
-  def tokenizeNodeWithLGS(n: CitableNode, ucodeString: Boolean = true) = {
+  // required by MidOrthography trait
+  def tokenizeNode (n: CitableNode) : Vector[MidToken]  = {
+    tokenizeNodeWithLGS(n, true)
+  }
+
+
+
+  /** Tokenize the text of a `CitableNode` into a Vector of `MidToken`s.
+  *
+  * @param n Node to tokenize.
+  * @param ucodeString True if text strings of resulting `MidToken`s should
+  * be in `LiteraryGreekString`'s Unicode representation;  false if ASCII.
+  */
+  def tokenizeNodeWithLGS(n: CitableNode, ucodeString: Boolean = true) : Vector[MidToken] = {
     val syllables =  syllabify(n.text)
     val urn = n.urn
 
@@ -34,7 +47,6 @@ import edu.holycross.shot.mid.validator._
       val newVersion = urn.addVersion(urn.versionOption.getOrElse("") + "_sylls")
       val newUrn = CtsUrn(newVersion.dropPassage.toString + newPassage)
 
-      //println(unit + " in " + newUrn)
       val trimmed = if (ucodeString) unit._1.ucode.trim else unit._1.ascii.trim
 
       MidToken(newUrn, trimmed, Some(TextSyllable))
@@ -44,9 +56,44 @@ import edu.holycross.shot.mid.validator._
   }
 
 
-  def tokenizeNode (n: CitableNode) : Vector[MidToken]  = {
-    tokenizeNodeWithLGS(n, true)
+  /** Given a string in either the ASCII or Unicode representation
+  * recognized by the `LiteraryGreekString` class, tokenize the string
+  * into `LiteraryGreekString`s representing syllables.
+  *
+  * @param s String to syllabify.
+  *
+  */
+  def syllabify(s: String): Vector[LiteraryGreekString] = {
+    val vect = s.split(" ").filter(_.nonEmpty).toVector
+    val gsVect = vect.map(LiteraryGreekString(_))
+    syllabify(gsVect)
   }
+
+
+
+  /** Given a Vector of  `LiteraryGreekString`s, tokenize each item into
+  * into `LiteraryGreekString`s representing syllables.
+  * The algorithm directly mimics the description of syllabic division
+  * in Smyth's *Greek Grammar*.
+  *
+  * @param v Vector of `LiteraryGreekString`s to syllabify.
+  *
+  */
+  def syllabify(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
+    val dia = splitOnDiaeresis(v)
+    val mn = splitOnMuNu(dia)
+    val lc = splitOnLiqCons(mn)
+    val dv = splitOnDiphthVowel(lc)
+    val vd = splitOnVowelDiphth(dv)
+    val shrtVwl = splitOnShortVowelVowel(vd)
+    val lngVwl = splitOnLongVowelVowel(shrtVwl)
+    val uVwl = splitOnUpsilonVowel(lngVwl)
+    val dblCons = splitOnDoubleCons(uVwl)
+    val conss = splitOnConsCluster(dblCons)
+    splitOnVCV(conss)
+  }
+
+
 
   def splitOnDiaeresis(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
     val diaPattern = "(.*[aeiouhw][\\)\\(]?)([iu][\\)\\(]?\\+)(.*)".r
@@ -219,22 +266,5 @@ import edu.holycross.shot.mid.validator._
       })
   }
 
-  def syllabify(s: String): Vector[LiteraryGreekString] = {
-    val vect = s.split(" ").filter(_.nonEmpty).toVector
-    val gsVect = vect.map(LiteraryGreekString(_))
-    syllabify(gsVect)
-  }
-  def syllabify(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    val dia = splitOnDiaeresis(v)
-    val mn = splitOnMuNu(dia)
-    val lc = splitOnLiqCons(mn)
-    val dv = splitOnDiphthVowel(lc)
-    val vd = splitOnVowelDiphth(dv)
-    val shrtVwl = splitOnShortVowelVowel(vd)
-    val lngVwl = splitOnLongVowelVowel(shrtVwl)
-    val uVwl = splitOnUpsilonVowel(lngVwl)
-    val dblCons = splitOnDoubleCons(uVwl)
-    val conss = splitOnConsCluster(dblCons)
-    splitOnVCV(conss)
-  }
+
 }

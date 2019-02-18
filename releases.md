@@ -1,5 +1,7 @@
 # Release notes
 
+**1.3.0**:  Build with new version of `MidOrthography` adding new functions to `LGSyllable`.
+
 
 **1.2.0**: `LGSyllable` object now implements `MidOrthography`
 
