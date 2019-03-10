@@ -1,5 +1,7 @@
 # Release notes
 
+**1.4.0**:  Updates to `MidOrthography` with new functionality.
+
 **1.3.0**:  Build with new version of `MidOrthography` adding new functions to `LGSyllable`.
 
 
