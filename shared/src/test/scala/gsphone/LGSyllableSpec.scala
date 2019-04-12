@@ -9,7 +9,7 @@ class LGSyllableSpec extends FlatSpec {
   "Syllabification of a literary Greek string"  should "pass a single syllable unchagined" in {
     val sylls = LGSyllable.syllabify(Vector(LiteraryGreekString("w)=")))
     val syllsAscii = sylls.map(_.ascii)
-    assert (syllsAscii == Vector("w)="))
+    assert (syllsAscii == Vector("w"))
   }
 
   it should "preserve leading and trailing content when recursively splitting on diaeresis" in {
@@ -26,7 +26,7 @@ class LGSyllableSpec extends FlatSpec {
     val gsVector = strVector.map(LiteraryGreekString(_))
     val sylls = LGSyllable.splitOnMuNu(gsVector)
     val syllsUcode = sylls.map(_.ucode)
-    assert(syllsUcode == Vector("τῶν","μι","μνησκόμενοσ"))
+    assert(syllsUcode == Vector("τῶν","μι","μνησκόμενος"))
   }
   it should "preserve leading and trailing content when recursively splitting on liquid+consonant" in {
     val gsVector = Vector(LiteraryGreekString("σμινθεῦ"))
@@ -91,6 +91,8 @@ class LGSyllableSpec extends FlatSpec {
       val syllsAscii = sylls.map(_.ascii)
       assert(syllsAscii == Vector("e)/","qh","ken"))
   }
+
+
 
 /*
 def testMap = [

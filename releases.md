@@ -1,5 +1,10 @@
 # Release notes
 
+
+**1.4.2**:  Strips accents and breathings in syllabification.
+
+**1.4.1**:  Bug fixes.
+
 **1.4.0**:  Updates to `MidOrthography` with new functionality.
 
 **1.3.0**:  Build with new version of `MidOrthography` adding new functions to `LGSyllable`.

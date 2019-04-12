@@ -17,7 +17,7 @@ import edu.holycross.shot.mid.validator._
 
 
   // required by MidOrthography trait
-  def orthography = "Tokeniziation of literary Greek orthography by syllable"
+  def orthography = "Tokenization of literary Greek orthography by syllable"
 
   // required by MidOrthography trait
   def tokenCategories = Vector(TextSyllable)
@@ -80,7 +80,8 @@ import edu.holycross.shot.mid.validator._
   *
   */
   def syllabify(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    val dia = splitOnDiaeresis(v)
+    val stripped = v.map(_.stripBreathingAccent)
+    val dia = splitOnDiaeresis(stripped)
     val mn = splitOnMuNu(dia)
     val lc = splitOnLiqCons(mn)
     val dv = splitOnDiphthVowel(lc)
@@ -88,7 +89,9 @@ import edu.holycross.shot.mid.validator._
     val shrtVwl = splitOnShortVowelVowel(vd)
     val lngVwl = splitOnLongVowelVowel(shrtVwl)
     val uVwl = splitOnUpsilonVowel(lngVwl)
+
     val dblCons = splitOnDoubleCons(uVwl)
+    // Make consonant clusters smarter?
     val conss = splitOnConsCluster(dblCons)
     splitOnVCV(conss)
   }
