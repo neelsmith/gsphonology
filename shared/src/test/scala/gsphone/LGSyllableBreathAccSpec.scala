@@ -8,7 +8,7 @@ class LGSyllableBreathAccSpec extends FlatSpec {
 
   "Syllabification of a literary Greek string"  should "correctly split on consonants when syllable has breathings and accents" in {
     val v = Vector( LiteraryGreekString("e)/sti"))
-    val sylls = LGSyllable.syllabify(v)
+    val sylls = LGSyllable.syllabify(v, false)
     println(sylls)
   }
 

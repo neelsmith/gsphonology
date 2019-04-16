@@ -11,7 +11,7 @@ object Main {
     val iliad1_1_vector = iliad1_1.split(" ").toVector.map(LiteraryGreekString(_))
 
     println("\nSyllabified:")
-    val sylls = LGSyllable.syllabify(iliad1_1_vector)
+    val sylls = LGSyllable.syllabify(iliad1_1_vector, false)
     println(sylls.map(_.ucode).mkString("-"))
     println("\nRise and fall in pitch by syllable:")
     println(sylls.map(_.accent.getOrElse("-")).mkString + "\n")

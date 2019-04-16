@@ -7,7 +7,7 @@ import edu.holycross.shot.greek._
 class LGSyllableSpec extends FlatSpec {
 
   "Syllabification of a literary Greek string"  should "pass a single syllable unchagined" in {
-    val sylls = LGSyllable.syllabify(Vector(LiteraryGreekString("w)=")))
+    val sylls = LGSyllable.syllabify(Vector(LiteraryGreekString("w)=")), false)
     val syllsAscii = sylls.map(_.ascii)
     assert (syllsAscii == Vector("w"))
   }

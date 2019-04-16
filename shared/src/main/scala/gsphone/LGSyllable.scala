@@ -62,14 +62,32 @@ import edu.holycross.shot.mid.validator._
   *
   * @param s String to syllabify.
   *
-  */
+
   def syllabify(s: String): Vector[LiteraryGreekString] = {
+    syllabify(s, false)
+  }
+  */
+
+  /** Given a string in either the ASCII or Unicode representation
+  * recognized by the `LiteraryGreekString` class, tokenize the string
+  * into `LiteraryGreekString`s representing syllables.
+  *
+  * @param s String to syllabify.
+  * @param keepAccent True if accents should be retained in
+  * strings of individual syllables.
+  *
+  */
+  def syllabify(s: String, keepAccent:  Boolean = false): Vector[LiteraryGreekString] = {
     val vect = s.split(" ").filter(_.nonEmpty).toVector
     val gsVect = vect.map(LiteraryGreekString(_))
-    syllabify(gsVect)
+    syllabify(gsVect, keepAccent)
   }
 
+/*
+  def syllabify(v : Vector[LiteraryGreekString]) :  Vector[LiteraryGreekString] = {
+    syllabify(v, false)
 
+  }*/
 
   /** Given a Vector of  `LiteraryGreekString`s, tokenize each item into
   * into `LiteraryGreekString`s representing syllables.
@@ -79,9 +97,12 @@ import edu.holycross.shot.mid.validator._
   * @param v Vector of `LiteraryGreekString`s to syllabify.
   *
   */
-  def syllabify(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    val stripped = v.map(_.stripBreathingAccent)
-    val dia = splitOnDiaeresis(stripped)
+  def syllabify(v : Vector[LiteraryGreekString], keepAccent: Boolean): Vector[LiteraryGreekString] = {
+    val strVector = keepAccent match {
+      case true => v
+      case false => v.map(_.stripBreathingAccent)
+    }
+    val dia = splitOnDiaeresis(strVector)
     val mn = splitOnMuNu(dia)
     val lc = splitOnLiqCons(mn)
     val dv = splitOnDiphthVowel(lc)
