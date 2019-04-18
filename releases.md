@@ -1,5 +1,7 @@
 # Release notes
 
+**1.4.3**: Fixes a bug in syllabification when consonant cluster immediately preceded by accent.
+
 
 **1.4.2**:  Strips accents and breathings in syllabification.
 

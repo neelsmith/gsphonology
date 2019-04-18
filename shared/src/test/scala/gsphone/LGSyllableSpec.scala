@@ -18,6 +18,26 @@ class LGSyllableSpec extends FlatSpec {
     assert (syllsAscii == Vector("w"))
   }
 
+  it should "work on initial syllable with breath+accent when omitting accent" in {
+    val s = "ἔστι"
+    val sylls = LGSyllable.syllabify(s)
+    val expected =  Vector(LiteraryGreekString("e"), LiteraryGreekString("sti"))
+    assert(sylls == expected)
+  }
+
+  it should "work on initial syllable with breath+accent when keeping accent" in {
+    val s = "ἔστι"
+    val sylls = LGSyllable.syllabify(s,true)
+    val expected =  Vector(LiteraryGreekString("e)/"), LiteraryGreekString("sti"))
+    assert(sylls == expected)
+  }
+
+  it should "use clsuter to work on initial syllable with breath+accent when keeping accent" in {
+    val v = Vector(LiteraryGreekString("ἔστι"))
+    val sylls = LGSyllable.splitOnConsCluster(v)
+    println(sylls)
+  }
+
 
 
 

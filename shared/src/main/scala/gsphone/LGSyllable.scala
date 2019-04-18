@@ -83,12 +83,6 @@ import edu.holycross.shot.mid.validator._
     syllabify(gsVect, keepAccent)
   }
 
-/*
-  def syllabify(v : Vector[LiteraryGreekString]) :  Vector[LiteraryGreekString] = {
-    syllabify(v, false)
-
-  }*/
-
   /** Given a Vector of  `LiteraryGreekString`s, tokenize each item into
   * into `LiteraryGreekString`s representing syllables.
   * The algorithm directly mimics the description of syllabic division
@@ -262,7 +256,8 @@ import edu.holycross.shot.mid.validator._
       })
   }
   def splitOnConsCluster(v : Vector[LiteraryGreekString]): Vector[LiteraryGreekString] = {
-    val consClustPattern = "(.*[\\)\\(aeiouhw\\|\\+])([bgdzqkpcstfxy][mnbgdzqklcprstfxy]+.*)".r
+    //val consClustPattern = "(.*[\\)\\(aeiouhw\\|\\+])([bgdzqkpcstfxy][mnbgdzqklcprstfxy]+.*)".r
+    val consClustPattern = "(.*[\\)\\(aeiouhw\\|\\+\\\\\\/=])([bgdzqkpcstfxy][mnbgdzqklcprstfxy]+.*)".r
     v.flatMap (gs => {
       gs.ascii match {
         case consClustPattern(lead,  trail) => {
